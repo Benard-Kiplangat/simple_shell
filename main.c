@@ -29,7 +29,7 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		else
 		{
 			cnt++;
-			printf("hsh: %i : %s command not found\n", cnt, prompt);
+			printf("hsh: %i : %s : not found\n", cnt, prompt);
 		}
 	}
 	while (isatty(STDIN_FILENO) && ext);
