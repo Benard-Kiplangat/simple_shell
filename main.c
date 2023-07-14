@@ -10,28 +10,44 @@
 
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
-	char prompt[300];
-	int ext, ech, cnt = 0;
+	size_t n = 0;
+	int i;
+	pid_t p;
+	char *prompt;
+	char *get_token;
+	char *getlin[100];
+	int nread, ext, cnt = 0;
 
 	do
 	{
 		write(STDOUT_FILENO, "~$ ", 3);
-		scanf("%s", prompt);
+		nread = getline(&prompt, &n, stdin);
 		ext = strncmp(prompt, "exit", 4);
-		ech = strncmp(prompt, "echo", 4);
+		get_token = strtok(prompt, " ");
 
-		if (ech == 0 || ext == 0)
+		for (i = 0; get_token != NULL; i++)
 		{
-			printf("%s", prompt + 4);
-			if (ech == 0)
-				printf("\n");
+			getlin[i] = strdup(get_token);
+			get_token = strtok(NULL, " ");
 		}
+		getlin[i] = NULL;
+		if (ext == 0)
+			return (0);
+		p = fork();
+		if (p == 0)
+		{
+			execv("/bin/sh", getlin);
+			sleep(3);
+		}
+		else if (p != -1)
+			wait(NULL);
 		else
 		{
 			cnt++;
-			printf("hsh: %i : %s : not found\n", cnt, prompt);
+			prompt[nread - 1] = '\0';
+			printf("hsh: %i: %s: not found", cnt, prompt);
 		}
 	}
-	while (isatty(STDIN_FILENO) && ext);
-	return (0);
+	while (isatty(STDIN_FILENO));
+	return (nread);
 }

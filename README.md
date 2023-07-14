@@ -19,6 +19,9 @@ From version 7 of UNIX, Stephen Bourne at Bell Labs, created and distributed Bou
 
 ### What is a pid and a ppid
 
+Every instance of an executing program has a unique process id, called PID in short. This PID will be used by other functions or system calls to interact and manipulate the process.
+
+PPID means parent process ID, for each process has a parent process that created it. To get PID or PPID for your program, use `getpid` or `getppid` function respectively.
 
 ### How to manipulate the environment of the current process
 
