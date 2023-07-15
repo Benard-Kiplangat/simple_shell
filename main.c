@@ -23,12 +23,12 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		write(STDOUT_FILENO, "~$ ", 3);
 		nread = getline(&prompt, &n, stdin);
 		ext = strncmp(prompt, "exit", 4);
-		get_token = strtok(prompt, " ");
+		get_token = strtok(prompt, " \t\n\r\a");
 
 		for (i = 0; get_token != NULL; i++)
 		{
 			getlin[i] = strdup(get_token);
-			get_token = strtok(NULL, " ");
+			get_token = strtok(NULL, " \n\t\r\a");
 		}
 		getlin[i] = NULL;
 		if (ext == 0)
@@ -36,8 +36,8 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		p = fork();
 		if (p == 0)
 		{
-			execv("/bin/sh", getlin);
-			sleep(3);
+			execve(getlin[0], getlin, NULL);
+			sleep(1);
 		}
 		else if (p != -1)
 			wait(NULL);
