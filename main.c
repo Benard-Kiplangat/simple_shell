@@ -2,8 +2,8 @@
 
 /**
  * main - the shell
- * argc - the number of arguments suplied from the command line
- * argv - an array of arguments supplied to the program
+ * @argc: the number of arguments suplied from the command line
+ * @argv: an array of arguments supplied to the program
  *
  * Return: 0 on success, -1 on failure
  */
@@ -11,43 +11,57 @@
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
 	size_t n = 0;
-	int i;
-	pid_t p;
-	char *prompt;
-	char *get_token;
-	char *getlin[100];
+	int i; /* iterator */
+	pid_t p; /* for the new child process to execute programs */
+	char *prompt; /* what we will read from the standard in */
+	char *get_token; /* temporarily store tokens and arguments recieved */
+	char *getlin[100]; /* to store tokens after they've been stripped */
 	int nread, ext, cnt = 0;
+	/**
+	 * nread: number of chars read from stdin
+	 * ext: to compare if the user typed exit to terminate their session
+	 * cnt: to count the number of calls to the shell
+	 */
 
-	do
-	{
-		write(STDOUT_FILENO, "~$ ", 3);
-		nread = getline(&prompt, &n, stdin);
+	do {
+		write(STDOUT_FILENO, "~$ ", 3); /* to print the prompt */
+		nread = getline(&prompt, &n, stdin); /* getting the input */
 		ext = strncmp(prompt, "exit", 4);
+		/* reading the first 4 chars if it matches with exit */
 		get_token = strtok(prompt, " \t\n\r\a");
+		/* stripping the user input for the program path/name */
 
 		for (i = 0; get_token != NULL; i++)
 		{
+		/* stripping and saving the program and its arguments */
 			getlin[i] = strdup(get_token);
 			get_token = strtok(NULL, " \n\t\r\a");
 		}
-		getlin[i] = NULL;
+		getlin[i] = NULL; /* NULL-terminating the array */
 		if (ext == 0)
-			return (0);
+			return (0); /* exiting if the user typed exit */
 		p = fork();
+		/*creating the child process to handle the arguments*/
 		if (p == 0)
 		{
+			cnt++;
+			/* if successful, execute the user's commands */
 			execve(getlin[0], getlin, NULL);
-			sleep(1);
+			sleep(1); /* sleep for a second as the OS executes */
 		}
 		else if (p != -1)
-			wait(NULL);
+			wait(NULL); /* wait till the child process terminates*/
 		else
 		{
+			/* if fork returns an error(-1), handle errors */
 			cnt++;
 			prompt[nread - 1] = '\0';
 			printf("hsh: %i: %s: not found", cnt, prompt);
 		}
-	}
-	while (isatty(STDIN_FILENO));
-	return (nread);
+	} while (isatty(STDIN_FILENO));
+	/**
+	 * As long as its a terminal, this program will always
+	 * prompt a user to enter a command
+	 */
+	return (nread); /* return the number of chars read */
 }
