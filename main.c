@@ -42,7 +42,7 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		}
 		getlin[i] = NULL; /* NULL-terminating the array */
 		if (ext == 0)
-			return (0); /* exiting if the user typed exit */
+			exit(0); /* exiting if the user typed exit */
 		p = fork();
 		/*creating the child process to handle the arguments*/
 		if (p == 0)
