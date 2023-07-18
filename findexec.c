@@ -8,16 +8,15 @@
  * Return: 1 if an excecutable is found and 0 if not found
  */
 
-int findexec(char **environ, char **getlin)
+int findexec(char **environ, char *get_token, char **path, char **getlin)
 {
 	int i;
-	char *path[10];
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		if (!strncmp(environ[i], "PATH", 4))
 		{
-			_strtok(environ[i] + 5, path, ":\n");
+			_strtok(environ[i] + 5, get_token, path, ":\n");
 			break;
 		}
 	}
@@ -30,7 +29,5 @@ int findexec(char **environ, char **getlin)
 			getlin[0] = strdup(path[i]);
 		}
 	}
-	for (i = 0; path[i] != NULL; i++)
-		free(path[i];
 	return (0);
 }

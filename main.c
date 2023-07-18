@@ -12,12 +12,16 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
 	int term = isatty(STDIN_FILENO); /* check if it's a terminal */
 	size_t n = 0;
+	char *get_token; /* temporarily store tokens and arguments recieved */
 	pid_t p; /* for the new child process to execute programs */
 	char *prompt; /* what we will read from the standard in */
 	char *getlin[100]; /* to store tokens after they've been stripped */
-	int i, nread, ext, env, cnt = 0;
-	int cmd_avaibl;
+	int nread, ext, env, cnt = 0;
+	int i, cmd_avaibl;
+	char *status;
+	char *path[10];
 
+	get_token = malloc(sizeof(char) * 100);
 	/**
 	 * nread: number of chars read from stdin
 	 * ext: to compare if the user typed exit to terminate their session
@@ -32,7 +36,7 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		ext = strncmp(prompt, "exit", 4);
 		env = strncmp(prompt, "env", 3);
 		/* reading the first 4 chars if it matches with exit */
-		_strtok(prompt, getlin, " \t\n\r\a");
+		_strtok(prompt, get_token, getlin, " \t\n\r\a");
 		/**
 		get_token = strtok(prompt, " \t\n\r\a");
 		* stripping the user input for the program path/name *
@@ -50,10 +54,19 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 			break;
 		}
 		if (ext == 0)
-			exitfunc(getlin[1]);
+		{
+			status = getlin[1];
+			for (i = 0; i <= 20; i++)
+	    			free(getlin[i]);
+			for (i = 0; i <= 10; i++)
+				free(path[i]);
+                	free(prompt);
+			free(get_token);
+			exitfunc(status);
 		/* exiting if the user typed exit */
+		}
 		if (getlin[0][0] != '/')
-			findexec(environ, getlin);
+			findexec(environ, get_token, path, getlin);
 		cmd_avaibl = access(getlin[0], X_OK);
 		if (!cmd_avaibl)
 		{
@@ -78,13 +91,11 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 			prompt[nread - 1] = '\0';
 			printf("hsh: %i: %s: not found\n", cnt, getlin[0]);
 		}
-		while (getlin[i] != NULL)
-			free(getlin[i]);
-		free(prompt);
 	} while (term);
 	/**
 	 * As long as its a terminal, this program will always
 	 * prompt a user to enter a command
 	 */
+	free(get_token);
 	return (nread); /* return the number of chars read */
 }

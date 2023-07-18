@@ -7,19 +7,16 @@
  * Return: pointer to getlin or -1 on error
  */
 
-int _strtok(char *prompt, char **getlin, char *delims)
+int _strtok(char *prompt, char *get_token, char **getlin, char *delims)
 {
 	int frm = 0, to = 0;
 	int i, j, k = 0; /* i: iterator */
-	char *get_token; /* temporarily store tokens and arguments recieved */
 
 	/**
 	 * nread: number of chars read from stdin
 	 * ext: to compare if the user typed exit to terminate their session
 	 * cnt: to count the number of calls to the shell
 	 */
-
-	get_token = malloc(sizeof(char) * 50);
 
 	if (!get_token)
 		return (-1);
@@ -46,7 +43,6 @@ int _strtok(char *prompt, char **getlin, char *delims)
 		}
 		getlin[k] = NULL;
 	}
-	free(get_token);
 	/**
 	get_token = strtok(prompt, " \t\n\r\a");
 	* stripping the user input for the program path/name */

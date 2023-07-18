@@ -12,5 +12,6 @@ void exitfunc(char *status)
 	int intstatus = 0;
 	if (status)
 		intstatus = atoi(status);
+	free(status);
 	exit(intstatus); /* exiting if the user typed exit */
 }
