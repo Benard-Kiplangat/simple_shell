@@ -12,12 +12,12 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
 	int term = isatty(STDIN_FILENO); /* check if it's a terminal */
 	size_t n = 0;
-	int i; /* i: iterator */
 	pid_t p; /* for the new child process to execute programs */
 	char *prompt; /* what we will read from the standard in */
-	char *get_token; /* temporarily store tokens and arguments recieved */
 	char *getlin[100]; /* to store tokens after they've been stripped */
-	int nread, ext, exec_rtn = 0, cnt = 0;
+	int i, nread, ext, env, cnt = 0;
+	int cmd_avaibl;
+
 	/**
 	 * nread: number of chars read from stdin
 	 * ext: to compare if the user typed exit to terminate their session
@@ -30,37 +30,57 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		/* to print the prompt */
 		nread = getline(&prompt, &n, stdin); /* getting the input */
 		ext = strncmp(prompt, "exit", 4);
+		env = strncmp(prompt, "env", 3);
 		/* reading the first 4 chars if it matches with exit */
+		_strtok(prompt, getlin, " \t\n\r\a");
+		/**
 		get_token = strtok(prompt, " \t\n\r\a");
-		/* stripping the user input for the program path/name */
+		* stripping the user input for the program path/name *
 
 		for (i = 0; get_token != NULL; i++)
 		{
-		/* stripping and saving the program and its arguments */
+		* stripping and saving the program and its arguments *
 			getlin[i] = strdup(get_token);
 			get_token = strtok(NULL, " \n\t\r\a");
 		}
-		getlin[i] = NULL; /* NULL-terminating the array */
-		if (ext == 0)
-			exit(0); /* exiting if the user typed exit */
-		p = fork();
-		/*creating the child process to handle the arguments*/
-		if (p == 0)
+		getlin[i] = NULL; * NULL-terminating the array */
+		if (env == 0)
 		{
-			cnt++;
-			/* if successful, execute the user's commands */
-			exec_rtn = execve(getlin[0], getlin, NULL);
-			sleep(1); /* sleep for a second as the OS executes */
+			envfunc();
+			break;
 		}
-		if (p != -1)
-			wait(NULL); /* wait till the child process terminates*/
-		if (exec_rtn == -1)
+		if (ext == 0)
+			exitfunc(getlin[1]);
+		/* exiting if the user typed exit */
+		if (getlin[0][0] != '/')
+			findexec(environ, getlin);
+		cmd_avaibl = access(getlin[0], X_OK);
+		if (!cmd_avaibl)
 		{
-			/* if fork returns an error(-1), handle errors */
+			p = fork();
+		/*creating the child process to handle the arguments*/
+			if (p == 0)
+			{
+				cnt++;
+			/* if successful, execute the user's commands */
+				execve(getlin[0], getlin, environ);
+				sleep(1);
+			/* sleep for a second as the OS executes */
+			}
+			if (p != -1)
+				wait(NULL);
+			/* wait till the child process terminates*/
+		}
+		else
+		{
+		/* if fork returns an error(-1), handle errors */
 			cnt++;
 			prompt[nread - 1] = '\0';
-			printf("hsh: %i: %s: not found\n", cnt, prompt);
+			printf("hsh: %i: %s: not found\n", cnt, getlin[0]);
 		}
+		while (getlin[i] != NULL)
+			free(getlin[i]);
+		free(prompt);
 	} while (term);
 	/**
 	 * As long as its a terminal, this program will always
