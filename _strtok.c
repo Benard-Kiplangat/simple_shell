@@ -25,9 +25,13 @@ int _strtok(char *prompt, char *get_token, char **getlin, char *delims)
 	{
 		for (j = 0; delims[j] != '\0'; j++)
 		{
-			if (prompt[i] == delims[j])
+			if (prompt[i] == delims[j] || prompt[i + 1] == '\0')
 			{
-				if (prompt[i + 1] == delims[j + 1])
+				if ( frm == 0 && prompt[i + 1] == '\0')
+				{
+					i++;
+				}
+				if (prompt[i + 1] == delims[j + 1] )
 				{
 					i++;
 					break;

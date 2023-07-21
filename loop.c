@@ -9,11 +9,12 @@
  * Return: 0 on success, -1 on failure
  */
 
-int loop(char **getlin, int *cnt)
+int loop(char **getlin)
 {
 	pid_t p; /* for the new child process to execute programs */
-	int nrd, ext, env, cmd_avaibl, term = isatty(STDIN_FILENO);
+	int nrd, ext, env, cmd_avaibl, cntint = 0, term = isatty(STDIN_FILENO);
 	char *prompt, *get_token, *status, *path[10];
+	int *cnt = &cntint;
 
 	prompt = calloc(sizeof(char), 1024);
 	get_token = calloc(sizeof(char), 100);

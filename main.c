@@ -5,54 +5,37 @@
  * @argv: an array of arguments supplied to the program
  * Return: 0 on success, -1 on failure
  */
-int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
+int main(int argc, char **argv)
 {
 	char *getlin[100];
-	int cnt = 0, readch = 0;
+	char *path = strdup("./");
+	int readch = 0, i = 1;
 
-	readch += loop(getlin, &cnt);
+	if (argc > 1)
+	{
+		while (i < argc)
+		{
+			if (argv[i][0] != '.' || argv[i][0] != '/')
+				path = strcat(path, argv[i]);
+			else
+				path = strdup(argv[i]);
 
-	/*
-	do {
-		if (term)
-			write(STDOUT_FILENO, "~$ ", 3);
-		nrd = _getline(prompt); * getting the input *
-		ext = strncmp(prompt, "exit", 4);
-		env = strncmp(prompt, "env", 3);
-		_strtok(prompt, get_token, getlin, " \t\n\r\a");
-		if (env == 0)
-		{
-			envfunc();
-			break;
-		}
-		if (ext == 0)
-		{
-			status = getlin[1];
-			free(prompt);
-			free(get_token);
-			exitfunc(status);
-		}
-		if (getlin[0][0] != '/')
-			findexec(environ, get_token, path, getlin);
-		cmd_avaibl = access(getlin[0], X_OK);
-		if (!cmd_avaibl)
-		{
-			p = fork();
-			if (p == 0)
+			i = i + 1;
+			printf("path: %s\n", path);
+			if (!access(path, R_OK))
 			{
-				cnt++;
-				execve(getlin[0], getlin, environ);
-				sleep(1);
+				printf("ok");
+				runshfile(path, getlin);
 			}
-			if (p != -1)
-				wait(NULL);
+			else
+			{
+				write(STDOUT_FILENO, "Can't read echo", 17);
+			}
+			i++;
 		}
-		else
-		{
-			cnt++;
-			printf("hsh: %i: %s: not found\n", cnt, getlin[0]);
-		}
-	} while (term);
-	return (nrd); * return the number of chars read */
+	}
+	else
+		readch += loop(getlin);
+
 	return (readch);
 }
