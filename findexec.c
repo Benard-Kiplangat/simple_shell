@@ -4,6 +4,9 @@
  * findexec - a function to find the right executable file path
  *
  * @environ: variable to extract the right path from the $PATH variable
+ * @get_token: temporary tokens
+ * @path: temporary paths
+ * @getlin: to hold the paths
  *
  * Return: 1 if an excecutable is found and 0 if not found
  */

@@ -1,20 +1,14 @@
 #include "main.h"
-
 /**
  * loop - the shell loop
- *
- * @argc: the number of arguments suplied from the command line
- * @argv: an array of arguments supplied to the program
- *
+ * @getlin: the command container
  * Return: 0 on success, -1 on failure
  */
-
 int loop(char **getlin)
 {
 	pid_t p; /* for the new child process to execute programs */
-	int nrd, ext, env, cmd_avaibl, cntint = 0, term = isatty(STDIN_FILENO);
+	int nrd, ext, env, cnt = 0, term = isatty(STDIN_FILENO);
 	char *prompt, *get_token, *status, *path[10];
-	int *cnt = &cntint;
 
 	prompt = calloc(sizeof(char), 1024);
 	get_token = calloc(sizeof(char), 100);
@@ -31,22 +25,14 @@ int loop(char **getlin)
 			break;
 		}
 		if (ext == 0)
-		{
-			status = getlin[1];
-			free(prompt);
-			free(get_token);
-			exitfunc(status);
-		}
+			exitfunc(getlin[1], prompt, get_token);
 		if (getlin[0][0] != '/')
 			findexec(environ, get_token, path, getlin);
-
-		cmd_avaibl = access(getlin[0], X_OK);
-		if (!cmd_avaibl)
+		if (!access(getlin[0], X_OK))
 		{
 			p = fork();
 			if (p == 0)
 			{
-				*cnt = *cnt + 1;
 				execve(getlin[0], getlin, environ);
 				sleep(1);
 			}
@@ -55,9 +41,8 @@ int loop(char **getlin)
 		}
 		else
 		{
-			*cnt = *cnt + 1;
-			printf("Error: \n");
-			errmsg(getlin, cnt);
+			cnt++;
+			errmsg(getlin, &cnt);
 		}
 	} while (term);
 	return (nrd); /* return the number of chars read */

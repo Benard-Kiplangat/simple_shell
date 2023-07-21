@@ -3,8 +3,8 @@
 /**
  * errmsg - a function that prints error messages
  *
- * cnt - the number of prints to the terminal
- * strerr - the error string
+ * @cnt: the number of prints to the terminal
+ * @getlin: the array of the commands
  *
  * Return: nothing
  */
@@ -15,7 +15,7 @@ void errmsg(char **getlin, int *cnt)
 	int num;
 	int i, rem, len = 0, n;
 
-  	num = *cnt;
+	num = *cnt;
 	n = *cnt;
 
 	while (n != 0)
