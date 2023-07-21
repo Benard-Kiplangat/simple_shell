@@ -13,9 +13,11 @@ extern char **environ;
 
 int main(int argc, char **argv);
 void envfunc(void);
+int loop(char **getlin, int *cnt);
 void exitfunc(char *status);
 int findexec(char **environ, char *get_token, char **path, char **getlin);
 int _strtok(char *prompt, char *get_token, char **getlin, char *delims);
-int _getline(char *prompt, int *n);
+int _getline(char *prompt);
+void errmsg(char **getlin, int *cnt);
 
 #endif

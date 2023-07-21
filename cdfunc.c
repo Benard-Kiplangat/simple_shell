@@ -6,9 +6,10 @@
  *
  *
  * Return: 
- */
+ *
 
 int cdfunc(char **environ)
 {
 	getpath
 }
+*/
