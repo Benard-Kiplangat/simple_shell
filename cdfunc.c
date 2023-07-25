@@ -41,6 +41,6 @@ int cdfunc(char **getlin, int *cnt)
 	getcwd(nwd, 150);
 	if (nwd == NULL)
 		return (-1);
-	setenvfunc("PWD", nwd, 1);
+	setenv("PWD", nwd, 1);
 	return (0);
 }
