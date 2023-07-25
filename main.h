@@ -21,7 +21,6 @@ int _getline(char *prompt);
 int cdfunc(char **getlin, int *cnt);
 void forkfunc(char **getlin, char **environ, int *cnt);
 void errmsg(char **getlin, int *cnt);
-int setenvfunc(char *key, char *value, int status);
 int runshfile(char *filename, char **getlin, int *cnt);
 ssize_t readshfile(const char *filename, char **buf);
 
