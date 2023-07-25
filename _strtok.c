@@ -12,22 +12,18 @@
 
 int _strtok(char *prompt, char *get_token, char **getlin, char *delims)
 {
-	int frm = 0, to = 0;
-	int i, j, k = 0; /* i: iterator */
+	int i, j = 0, k = 0, frm = 0, to = 0; /* i: iterator */
 
 	for (i = 0; prompt[i] != '\0'; i++)
 	{
 		for (j = 0; delims[j] != '\0'; j++)
 		{
-			if (prompt[i] == delims[j] || prompt[i + 1] == '\0')
+			if (prompt[i] == delims[j])
 			{
-				if (frm == 0 && prompt[i + 1] == '\0')
+				if (prompt[i + 1] == '\0')
 				{
-					i++;
-				}
-				if (prompt[i + 1] == delims[j + 1])
-				{
-					i++;
+					get_token = strndup(prompt + frm, i - frm);
+					getlin[k] = strdup(get_token);
 					break;
 				}
 				to = i;
@@ -39,7 +35,12 @@ int _strtok(char *prompt, char *get_token, char **getlin, char *delims)
 			}
 			frm = to;
 		}
-		getlin[k] = NULL;
 	}
+	if (k == 0 && to == 0 && i > 0)
+	{
+		getlin[k] = strdup(prompt);
+		k++;
+	}
+	getlin[k] = NULL;
 	return (0); /* return the number of chars read */
 }

@@ -3,48 +3,46 @@
  * runshfile - a function that runs commands in files
  * @filename: the file with the commands
  * @getlin: array for our commands
+ * @cnt: command counter
  * Return: the number of chars read
  */
-int runshfile(char *filename, char **getlin)
+int runshfile(char *filename, char **getlin, int *cnt)
 {
-	pid_t p; /* for the new child process to execute programs */
-	int ext, env, rtd = 0, j = 0, cnt = 0;
-	char *prompt, *command, *commands[100], *path[10];
+	int ext, cdf, env, rtd = 0, j = 0, status = 0;
+	char *prompt, *get_token, *commands[100], *path[10];
 
 	prompt = malloc(sizeof(char) * 1024);
-	command = calloc(sizeof(char), 100);
+	get_token = malloc(sizeof(char) * 100);
 	rtd = readshfile(filename, &prompt);
-	_strtok(prompt, command, commands, ";\nEOF");
+	_strtok(prompt, get_token, commands, "\n;");
 	do {
+		strcat(commands[j], "");
 		ext = strncmp(commands[j], "exit", 4);
 		env = strncmp(commands[j], "env", 3);
-		_strtok(commands[j], command, getlin, " \t\n\r\a");
+		cdf = strncmp(commands[j], "cd", 2);
+		_strtok(commands[j], get_token, getlin, " \t\n\r\a");
 		if (env == 0)
 		{
 			envfunc();
-			break;
+			continue;
 		}
 		if (ext == 0)
-			exitfunc(getlin[1], prompt, get_token);
-		j++;
+		{
+			if (getlin[1])
+				status = atoi(getlin[1]);
+			exitfunc(status);
+		}
+		if (cdf == 0)
+		{
+			cdfunc(getlin, cnt);
+			continue;
+		}
 		if (getlin[0][0] != '/')
-			findexec(environ, command, path, getlin);
-		if (!access(getlin[0], X_OK))
-		{
-			p = fork();
-			if (p == 0)
-			{
-				execve(getlin[0], getlin, environ);
-				sleep(1);
-			}
-			if (p != -1)
-				wait(NULL);
-		}
-		else
-		{
-			cnt++;
-			errmsg(getlin, cnt);
-		}
+			findexec(environ, get_token, path, getlin);
+		forkfunc(getlin, environ, cnt);
+		j++;
 	} while (commands[j] != NULL);
+	free(prompt);
+	free(get_token);
 	return (rtd); /* return the number of chars read */
 }

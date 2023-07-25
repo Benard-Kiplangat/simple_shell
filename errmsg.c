@@ -11,10 +11,11 @@
 
 void errmsg(char **getlin, int *cnt)
 {
-	char snum[6];
-	int num;
-	int i, rem, len = 0, n;
+	char snum[5];
+	char *buff;
+	int num, i, rem, len = 0, n;
 
+	buff = calloc(sizeof(char), 1024);
 	num = *cnt;
 	n = *cnt;
 
@@ -35,8 +36,18 @@ void errmsg(char **getlin, int *cnt)
 	snum[len + 1] = ' ';
 	snum[len + 2] = '\0';
 
-	write(STDOUT_FILENO, "hsh: ", 6);
-	write(STDOUT_FILENO, snum, 6);
-	write(STDOUT_FILENO, getlin[0], strlen(getlin[0]));
-	write(STDOUT_FILENO, ": not found\n", 12);
+	strcat(buff, "hsh: ");
+	strcat(buff, snum);
+	strcat(buff, getlin[0]);
+
+	if (!strncmp(getlin[0], "cd", 2))
+	{
+		strcat(buff, ": can't cd into ");
+		strcat(buff, getlin[1]);
+		strcat(buff, "\n");
+	}
+	else
+		strcat(buff, ": not found\n");
+	write(STDERR_FILENO, buff, strlen(buff));
+	free(buff);
 }

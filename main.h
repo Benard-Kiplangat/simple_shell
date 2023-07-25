@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <erron.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -14,13 +13,16 @@ extern char **environ;
 
 int main(int argc, char **argv);
 void envfunc(void);
-int loop(char **getlin);
-void exitfunc(char *status, char *prompt, char *get_token);
+int loop(char **getlin, int *cnt);
+void exitfunc(int status);
 int findexec(char **environ, char *get_token, char **path, char **getlin);
 int _strtok(char *prompt, char *get_token, char **getlin, char *delims);
 int _getline(char *prompt);
+int cdfunc(char **getlin, int *cnt);
+void forkfunc(char **getlin, char **environ, int *cnt);
 void errmsg(char **getlin, int *cnt);
-int runshfile(char *filename, char **getlin);
+int setenvfunc(char *key, char *value, int status);
+int runshfile(char *filename, char **getlin, int *cnt);
 ssize_t readshfile(const char *filename, char **buf);
 
 #endif

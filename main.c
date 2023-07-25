@@ -8,34 +8,33 @@
 int main(int argc, char **argv)
 {
 	char *getlin[100];
+	int cnt = 0;
+	char *opnerr = malloc(sizeof(char) * 35);
 	char *path = strdup("./");
-	int readch = 0, i = 1;
+	int readch = 0;
+
+	strcat(opnerr, "sh: 0: can't open ");
 
 	if (argc > 1)
 	{
-		while (i < argc)
-		{
-			if (argv[i][0] != '.' || argv[i][0] != '/')
-				path = strcat(path, argv[i]);
-			else
-				path = strdup(argv[i]);
+		if (argv[1][0] != '.' || argv[1][0] != '/')
+			strcat(path, argv[1]);
+		else
+			path = strdup(argv[1]);
 
-			i = i + 1;
-			printf("path: %s\n", path);
-			if (!access(path, R_OK))
-			{
-				printf("ok");
-				runshfile(path, getlin);
-			}
-			else
-			{
-				write(STDOUT_FILENO, "Can't read echo", 17);
-			}
-			i++;
+		if (!access(path, R_OK))
+			runshfile(path, getlin, &cnt);
+		else
+		{
+			strcat(opnerr, argv[1]);
+			strcat(opnerr, "\n");
+			write(STDERR_FILENO, opnerr, 35);
+			opnerr[0] = '\0';
 		}
 	}
 	else
-		readch += loop(getlin);
-
+		readch += loop(getlin, &cnt);
+	free(path);
+	free(opnerr);
 	return (readch);
 }

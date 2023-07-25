@@ -14,15 +14,20 @@
 int findexec(char **environ, char *get_token, char **path, char **getlin)
 {
 	int i;
+	char *paths;
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		if (!strncmp(environ[i], "PATH", 4))
 		{
-			_strtok(environ[i] + 5, get_token, path, ":\n");
+			/*_strtok(environ[i] + 5, get_token, path, ":");*/
 			break;
 		}
 	}
+	paths = strdup(environ[i] + 5);
+
+	_strtok(paths, get_token, path, ":");
+
 	for (i = 0; path[i] != NULL; i++)
 	{
 		strcat(path[i], "/");
@@ -30,6 +35,7 @@ int findexec(char **environ, char *get_token, char **path, char **getlin)
 		if (!access(path[i], X_OK))
 		{
 			getlin[0] = strdup(path[i]);
+			break;
 		}
 	}
 	return (0);
