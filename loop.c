@@ -7,12 +7,12 @@
  */
 int loop(char **getlin, int *cnt)
 {
-	int nrd, ext, env, cdf, status = 0, term = isatty(STDIN_FILENO);
+	int nrd, ext, i, env, cdf, status = 0, term = isatty(STDIN_FILENO);
 	char *prompt, *get_token, *path[10];
 
-	prompt = calloc(sizeof(char), 1024);
-	get_token = calloc(sizeof(char), 100);
 	do {
+		prompt = calloc(sizeof(char), 1024);
+		get_token = calloc(sizeof(char), 100);
 		if (term)
 			write(STDOUT_FILENO, "~$ ", 3);
 		nrd = _getline(prompt); /* getting the input */
@@ -39,6 +39,14 @@ int loop(char **getlin, int *cnt)
 		if (getlin[0][0] != '/')
 			findexec(environ, get_token, path, getlin);
 		forkfunc(getlin, environ, cnt);
+		for (i = 0; getlin[i] != NULL; i++)
+			free(getlin[i]);
+		for (i = 0; path[i] != NULL; i++)
+			free(path[i]);
+		if (prompt)
+			free(prompt);
+		if (get_token)
+			free(get_token);
 	} while (term);
 	return (nrd); /* return the number of chars read */
 }

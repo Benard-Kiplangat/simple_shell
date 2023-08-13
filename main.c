@@ -13,6 +13,8 @@ int main(int argc, char **argv)
 	char *path = strdup("./");
 	int readch = 0;
 
+	opnerr[0] = '\0';
+
 	strcat(opnerr, "sh: 0: can't open ");
 
 	if (argc > 1)

@@ -16,7 +16,7 @@ void envfunc(void);
 int loop(char **getlin, int *cnt);
 void exitfunc(int status);
 int findexec(char **environ, char *get_token, char **path, char **getlin);
-int _strtok(char *prompt, char *get_token, char **getlin, char *delims);
+int _strtok(char *prompt, char *token, char **getlin, char *delims);
 int _getline(char *prompt);
 int cdfunc(char **getlin, int *cnt);
 void forkfunc(char **getlin, char **environ, int *cnt);

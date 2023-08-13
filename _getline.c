@@ -10,12 +10,13 @@
 int _getline(char *prompt)
 {
 	size_t sz = 1024;
-	char *ptemp;
+	char *ptemp = calloc(sizeof(char), sz);
 	int nread = 0, rd = 0;
 	/* nread: number of chars read from stdin */
 
-	*prompt = '\0';
-	ptemp = malloc(sizeof(char) * sz);
+	prompt[0] = '\0';
+	ptemp[0] = '\0';
+
 	do {
 		rd = read(STDIN_FILENO, ptemp, 1024);
 		strcat(ptemp, " \n");

@@ -14,7 +14,7 @@
 int findexec(char **environ, char *get_token, char **path, char **getlin)
 {
 	int i;
-	char *paths;
+	char *paths = calloc(sizeof(char), 150);
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
@@ -24,7 +24,7 @@ int findexec(char **environ, char *get_token, char **path, char **getlin)
 			break;
 		}
 	}
-	paths = strdup(environ[i] + 5);
+	paths = environ[i] + 5;
 
 	_strtok(paths, get_token, path, ":");
 

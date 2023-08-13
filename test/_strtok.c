@@ -1,4 +1,6 @@
-#include "main.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 
 /**
  * _strtok - implementation of the strtok function
@@ -10,8 +12,12 @@
  * Return: pointer to getlin or -1 on error
  */
 
-int _strtok(char *prompt, char *token, char **getlin, char *delims)
+int main(void)
 {
+	char *getlin[100];
+	char *prompt = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin";
+	char *token = calloc(sizeof(char), 100);
+	char *delims = "=: \n";
 	int i = 0, j = 0;/* i: iterator */
 	int k = 0, c = 0, d = 0;
 
