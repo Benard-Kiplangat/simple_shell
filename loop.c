@@ -19,7 +19,7 @@ int loop(char **getlin, int *cnt)
 		ext = strncmp(prompt, "exit", 4);
 		env = strncmp(prompt, "env", 3);
 		cdf = strncmp(prompt, "cd", 2);
-		_strtok(prompt, get_token, getlin, " \t\n\r\aEOF");
+		_strtok(prompt, get_token, getlin, " \t\n\r\a");
 		if (env == 0)
 		{
 			envfunc();

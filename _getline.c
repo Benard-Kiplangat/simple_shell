@@ -19,7 +19,6 @@ int _getline(char *prompt)
 
 	do {
 		rd = read(STDIN_FILENO, ptemp, 1024);
-		strcat(ptemp, " \n");
 		strcat(prompt, ptemp);
 		if (rd > 0)
 			nread = nread + rd;
@@ -29,11 +28,6 @@ int _getline(char *prompt)
 			prompt = realloc(prompt, sz);
 		}
 	} while (rd >= 1024);
-	if (prompt[nread - 1] == '\n')
-	{
-		prompt[nread] = '\n';
-		prompt[nread + 1] = '\0';
-	}
 	free(ptemp);
 	return (nread);
 }
