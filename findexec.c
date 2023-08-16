@@ -20,33 +20,23 @@ int findexec(char **environ, char *get_token, char **path, char **getlin)
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		if (!strncmp(environ[i], "PATH", 4))
-		{
-			/*_strtok(environ[i] + 5, get_token, path, ":");*/
 			break;
-		}
 	}
-
 	strcpy(commandpath, environ[i] + 5);
-	printf("cmpath: %s\n", commandpath);
 	get_token = strtok_r(commandpath, ":", saveptr);
-	printf("get: %s\n", get_token);
 	for (i = 0; get_token != NULL; i++)
 	{
 		path[i] = _strdup(get_token);
-		printf("path: %s\n", path[i]);
 		get_token = strtok_r(NULL, ":", saveptr);
 	}
 	getlin[i] = NULL;
 	free(commandpath);
 	free(get_token);
-	/*_strtok(environ[i] + 5, get_token, path, ":");*/
 
 	for (i = 0; path[i] != NULL; i++)
 	{
 		strcat(path[i], "/");
-		printf("path1: %s\n", path[i]);
 		strcat(path[i], getlin[0]);
-		printf("path2: %s\n", path[i]);
 		if (!access(path[i], F_OK | X_OK))
 		{
 			free(getlin[0]);

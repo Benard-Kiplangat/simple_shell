@@ -43,7 +43,10 @@ void errmsg(char **getlin, int *cnt)
 	if (!strncmp(getlin[0], "cd", 2))
 	{
 		strcat(buff, ": can't cd into ");
-		strcat(buff, getlin[1]);
+		if (getlin[1] == NULL)
+			strcat(buff, "$HOME");
+		else
+			strcat(buff, getlin[1]);
 		strcat(buff, "\n");
 	}
 	else

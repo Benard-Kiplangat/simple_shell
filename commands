@@ -1,4 +1,5 @@
 ls -a
 hello hello
 ls
-vi fdfddddddd
+cd
+PWD

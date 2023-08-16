@@ -2,7 +2,7 @@
 
 /**
  * freer - a function that frees the buffers
- * buff - the buffer to free
+ * @buff: the buffer to free
  *
  * Return: always 0 or -1 on error
  */

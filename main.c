@@ -40,8 +40,10 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 	}
 	else
 	{
-		cnt += loop(&cnt);
+		free(path);
+		free(opnerr);
 		freer(getlin);
+		loop(&cnt);
 	}
 	return (cnt);
 }

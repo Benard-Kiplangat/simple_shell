@@ -8,8 +8,7 @@
 int cdfunc(char **getlin, int *cnt)
 {
 	int i = 0;
-	char nwd[150];
-	char *homepath, *cderr = "sh: cd: too many arguments\n";
+	char nwd[150], *homepath, *cderr = "sh: cd: too many arguments\n";
 
 	for (i = 0; getlin[i] != NULL; i++)
 	{
@@ -26,7 +25,11 @@ int cdfunc(char **getlin, int *cnt)
 	}
 	homepath = strdup(environ[i] + 5);
 	if (getlin[1] == NULL || getlin[1][0] == '~')
+	{
+		if (getlin[1] != NULL)
+			free(getlin[1]);
 		getlin[1] = strdup(homepath);
+	}
 	if (!strncmp(getlin[1], "-", 1))
 	{
 		write(STDOUT_FILENO, homepath, strlen(homepath));
@@ -42,5 +45,6 @@ int cdfunc(char **getlin, int *cnt)
 	if (nwd == NULL)
 		return (-1);
 	setenv("PWD", nwd, 1);
+	free(homepath);
 	return (0);
 }

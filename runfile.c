@@ -8,7 +8,7 @@
  */
 int runshfile(char *filename, char **getlin, int *cnt)
 {
-	int ext, cdf, env, rtd = 0, j = 0, status = 0;
+	int cdf, env, rtd = 0, j = 0;
 	char *prompt, *get_token, **commands, **path;
 
 	prompt = calloc(sizeof(char), 1024);
@@ -26,24 +26,19 @@ int runshfile(char *filename, char **getlin, int *cnt)
 		get_token = calloc(sizeof(char), 100);
 		path = calloc(sizeof(char *), 50);
 		strcat(commands[j], "");
-		ext = strncmp(commands[j], "exit", 4);
 		env = strncmp(commands[j], "env", 3);
 		cdf = strncmp(commands[j], "cd", 2);
 		_strtok(commands[j], get_token, getlin, " \t\n\r\a");
 		if (env == 0)
 		{
 			envfunc();
+			j++;
 			continue;
-		}
-		if (ext == 0)
-		{
-			if (getlin[1])
-				status = atoi(getlin[1]);
-			exitfunc(status);
 		}
 		if (cdf == 0)
 		{
 			cdfunc(getlin, cnt);
+			j++;
 			continue;
 		}
 		if (getlin[0][0] != '/')
