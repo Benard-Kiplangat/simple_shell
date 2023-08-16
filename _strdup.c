@@ -28,7 +28,10 @@ char *_strdup(char *str)
 		if (strcpy == NULL)
 			return (NULL);
 		if (size == 0)
+		{
+			free(strcpy);
 			return (NULL);
+		}
 		while (size2 < size)
 		{
 			strcpy[size2] = str[size2];

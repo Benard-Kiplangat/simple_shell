@@ -14,6 +14,7 @@ int runshfile(char *filename, char **getlin, int *cnt)
 	prompt = malloc(sizeof(char) * 1024);
 	get_token = malloc(sizeof(char) * 100);
 	rtd = readshfile(filename, &prompt);
+	free(filename);
 	_strtok(prompt, get_token, commands, "\n;");
 	do {
 		strcat(commands[j], "");
@@ -39,10 +40,10 @@ int runshfile(char *filename, char **getlin, int *cnt)
 		}
 		if (getlin[0][0] != '/')
 			findexec(environ, get_token, path, getlin);
+		free(get_token);
+		free(prompt);
 		forkfunc(getlin, environ, cnt);
 		j++;
 	} while (commands[j] != NULL);
-	free(prompt);
-	free(get_token);
 	return (rtd); /* return the number of chars read */
 }

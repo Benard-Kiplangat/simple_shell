@@ -5,12 +5,11 @@
  * @argv: an array of arguments supplied to the program
  * Return: 0 on success, -1 on failure
  */
-int main(int argc, char **argv)
+int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
-	char *getlin[100];
 	int cnt = 0;
-	char *opnerr = malloc(sizeof(char) * 35);
-	char *path = strdup("./");
+	/*char *opnerr = malloc(sizeof(char) * 35);
+	char *path = _strdup("./");
 	int readch = 0;
 
 	opnerr[0] = '\0';
@@ -22,21 +21,25 @@ int main(int argc, char **argv)
 		if (argv[1][0] != '.' || argv[1][0] != '/')
 			strcat(path, argv[1]);
 		else
-			path = strdup(argv[1]);
+			path = _strdup(argv[1]);
 
 		if (!access(path, R_OK))
+		{
+			free(opnerr);
 			runshfile(path, getlin, &cnt);
+		}
 		else
 		{
 			strcat(opnerr, argv[1]);
 			strcat(opnerr, "\n");
 			write(STDERR_FILENO, opnerr, 35);
 			opnerr[0] = '\0';
+			free(opnerr);
+			free(path);
 		}
 	}
 	else
-		readch += loop(getlin, &cnt);
-	free(path);
-	free(opnerr);
-	return (readch);
+	*/
+	cnt += loop(&cnt);
+	return (cnt);
 }

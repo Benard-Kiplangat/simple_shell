@@ -14,6 +14,8 @@
 int findexec(char **environ, char *get_token, char **path, char **getlin)
 {
 	int i;
+	char **saveptr = calloc(sizeof(char *), 20);
+	char *commandpath = calloc(sizeof(char), 150);
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
@@ -24,17 +26,34 @@ int findexec(char **environ, char *get_token, char **path, char **getlin)
 		}
 	}
 
-	_strtok(environ[i] + 5, get_token, path, ":");
+	strcpy(commandpath, environ[i] + 5);
+	printf("cmpath: %s\n", commandpath);
+	get_token = strtok_r(commandpath, ":", saveptr);
+	printf("get: %s\n", get_token);
+	for (i = 0; get_token != NULL; i++)
+	{
+		path[i] = _strdup(get_token);
+		printf("path: %s\n", path[i]);
+		get_token = strtok_r(NULL, ":", saveptr);
+	}
+	getlin[i] = NULL;
+	free(commandpath);
+	free(get_token);
+	/*_strtok(environ[i] + 5, get_token, path, ":");*/
 
 	for (i = 0; path[i] != NULL; i++)
 	{
 		strcat(path[i], "/");
+		printf("path1: %s\n", path[i]);
 		strcat(path[i], getlin[0]);
-		if (!access(path[i], X_OK))
+		printf("path2: %s\n", path[i]);
+		if (!access(path[i], F_OK))
 		{
-			getlin[0] = _strdup(path[i]);
+			free(getlin[0]);
+			getlin[0] = strdup(path[i]);
 			break;
 		}
 	}
+	free(saveptr);
 	return (0);
 }

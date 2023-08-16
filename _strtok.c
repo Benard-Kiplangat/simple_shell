@@ -12,7 +12,7 @@
 
 int _strtok(char *prompt, char *token, char **getlin, char *delims)
 {
-/*	int i;
+	int i;
 
 	token = _strdup(strtok(prompt, delims));
 	for (i = 0; token != NULL; i++)
@@ -20,9 +20,10 @@ int _strtok(char *prompt, char *token, char **getlin, char *delims)
 		getlin[i] = _strdup(token);
 		token = strtok(NULL, delims);
 	}
-	getlin[i] = NULL;*/
-	int i, j = 0;/* i: iterator */
-	int k = 0, c = 0, d = 0;
+	getlin[i] = NULL;
+	free(token);
+/*	int i, j = 0;*//* i: iterator */
+/*	int k = 0, c = 0, d = 0;
 
 	if (prompt != NULL)
 	{
@@ -73,6 +74,6 @@ int _strtok(char *prompt, char *token, char **getlin, char *delims)
 				c++;
 			}
 		}
-	}
+	}*/
 	return (0);
 }

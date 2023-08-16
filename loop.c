@@ -5,48 +5,59 @@
  * @cnt: command counter
  * Return: 0 on success, -1 on failure
  */
-int loop(char **getlin, int *cnt)
+int loop(int *cnt)
 {
-	int nrd, ext, i, env, cdf, status = 0, term = isatty(STDIN_FILENO);
-	char *prompt, *get_token, *path[10];
+	int term = isatty(STDIN_FILENO), status = 0, i;
+	int readchars = 0, ext;
+	char *prompt, **getlin, **path, *get_token;
 
+	getlin = calloc(sizeof(char *), 50);;
+	path = calloc(sizeof(char *), 20);
+	prompt = calloc(sizeof(char), 1024);;
 	do {
+		freer(getlin);
+		freer(path);
+		free(prompt);
+		getlin = calloc(sizeof(char *), 50);
+		path = calloc(sizeof(char *), 20);
 		prompt = calloc(sizeof(char), 1024);
-		get_token = calloc(sizeof(char), 100);
 		if (term)
 			write(STDOUT_FILENO, "~$ ", 3);
-		nrd = _getline(prompt); /* getting the input */
+		readchars = _getline(prompt); /* getting the input */
+		printf("prompt: %s\n", prompt);
+		if (prompt[readchars - 1] == '\n')
+			prompt[readchars - 1] = '\0';
 		ext = strncmp(prompt, "exit", 4);
-		env = strncmp(prompt, "env", 3);
-		cdf = strncmp(prompt, "cd", 2);
-		_strtok(prompt, get_token, getlin, " \t\n\r\a");
-		if (env == 0)
+		if (readchars <= 0)
 		{
-			envfunc();
+			write(STDOUT_FILENO, "\n~$ ", 4);
+			free(prompt);
+			freer(getlin);
+			freer(path);
+			free(get_token);
 			continue;
 		}
+		get_token = strtok(prompt, " \t\n\r\a");
+		for (i = 0; get_token != NULL; i++)
+		{
+			getlin[i] = strdup(get_token);
+			get_token = strtok(NULL, " \t\n\r\a");
+		}
+		getlin[i] = NULL;
+
 		if (ext == 0)
 		{
 			if (getlin[1])
 				status = atoi(getlin[1]);
+			free(get_token);
+			freer(getlin);
+			freer(path);
+			free(prompt);
 			exitfunc(status);
-		}
-		if (cdf == 0)
-		{
-			cdfunc(getlin, cnt);
-			continue;
 		}
 		if (getlin[0][0] != '/')
 			findexec(environ, get_token, path, getlin);
 		forkfunc(getlin, environ, cnt);
-		for (i = 0; getlin[i] != NULL; i++)
-			free(getlin[i]);
-		for (i = 0; path[i] != NULL; i++)
-			free(path[i]);
-		if (prompt)
-			free(prompt);
-		if (get_token)
-			free(get_token);
 	} while (term);
-	return (nrd); /* return the number of chars read */
+	return (readchars); /* return the number of chars read */
 }
