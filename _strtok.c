@@ -14,12 +14,14 @@ int _strtok(char *prompt, char *token, char **getlin, char *delims)
 {
 	int i;
 
-	token = _strdup(strtok(prompt, delims));
+	token = strtok(prompt, delims);
 	for (i = 0; token != NULL; i++)
 	{
+		free(getlin[i]);
 		getlin[i] = _strdup(token);
 		token = strtok(NULL, delims);
 	}
+	free(getlin[i]);
 	getlin[i] = NULL;
 	free(token);
 /*	int i, j = 0;*//* i: iterator */

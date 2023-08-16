@@ -47,10 +47,10 @@ int findexec(char **environ, char *get_token, char **path, char **getlin)
 		printf("path1: %s\n", path[i]);
 		strcat(path[i], getlin[0]);
 		printf("path2: %s\n", path[i]);
-		if (!access(path[i], F_OK))
+		if (!access(path[i], F_OK | X_OK))
 		{
 			free(getlin[0]);
-			getlin[0] = strdup(path[i]);
+			getlin[0] = _strdup(path[i]);
 			break;
 		}
 	}

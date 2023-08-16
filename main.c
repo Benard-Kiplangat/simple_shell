@@ -8,11 +8,9 @@
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
 	int cnt = 0;
-	/*char *opnerr = malloc(sizeof(char) * 35);
+	char *opnerr = calloc(sizeof(char), 35);
 	char *path = _strdup("./");
-	int readch = 0;
-
-	opnerr[0] = '\0';
+	char **getlin = calloc(sizeof(char *), 50);
 
 	strcat(opnerr, "sh: 0: can't open ");
 
@@ -27,6 +25,7 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		{
 			free(opnerr);
 			runshfile(path, getlin, &cnt);
+			freer(getlin);
 		}
 		else
 		{
@@ -34,12 +33,15 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 			strcat(opnerr, "\n");
 			write(STDERR_FILENO, opnerr, 35);
 			opnerr[0] = '\0';
+			freer(getlin);
 			free(opnerr);
 			free(path);
 		}
 	}
 	else
-	*/
-	cnt += loop(&cnt);
+	{
+		cnt += loop(&cnt);
+		freer(getlin);
+	}
 	return (cnt);
 }
