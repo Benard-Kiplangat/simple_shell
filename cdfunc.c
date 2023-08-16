@@ -3,9 +3,8 @@
  * cdfunc - a function to find the right executable file path
  * @getlin: to hold the paths
  * @cnt: command counter
- * Return: 0 when successful and -1 on error
  */
-int cdfunc(char **getlin, int *cnt)
+void cdfunc(char **getlin, int *cnt)
 {
 	int i = 0;
 	char nwd[150], *homepath, *cderr = "sh: cd: too many arguments\n";
@@ -15,7 +14,7 @@ int cdfunc(char **getlin, int *cnt)
 		if (i >= 2)
 		{
 			write(STDERR_FILENO, cderr, 27);
-			return (-1);
+			return;
 		}
 	}
 	for (i = 0; environ[i] != NULL; i++)
@@ -38,13 +37,13 @@ int cdfunc(char **getlin, int *cnt)
 	else if (chdir(getlin[1]) == -1)
 	{
 		*cnt = *cnt + 1;
+		free(homepath);
 		errmsg(getlin, cnt);
-		return (-1);
+		return;
 	}
 	getcwd(nwd, 150);
 	if (nwd == NULL)
-		return (-1);
+		return;
 	setenv("PWD", nwd, 1);
 	free(homepath);
-	return (0);
 }

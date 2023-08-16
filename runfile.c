@@ -29,15 +29,9 @@ int runshfile(char *filename, char **getlin, int *cnt)
 		env = strncmp(commands[j], "env", 3);
 		cdf = strncmp(commands[j], "cd", 2);
 		_strtok(commands[j], get_token, getlin, " \t\n\r\a");
-		if (env == 0)
+		if (env == 0 || cdf == 0)
 		{
-			envfunc();
-			j++;
-			continue;
-		}
-		if (cdf == 0)
-		{
-			cdfunc(getlin, cnt);
+			handlebuiltin(getlin, cnt, env, cdf);
 			j++;
 			continue;
 		}
