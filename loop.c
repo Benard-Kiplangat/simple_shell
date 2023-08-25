@@ -5,7 +5,7 @@
  */
 void loop(int *cnt)
 {
-	int term = isatty(STDIN_FILENO), status = 0, rd = 0, ext, cdf, env;
+	int term = isatty(STDIN_FILENO), status = 0, rd = 0, ext, cdf;
 	char *prompt, **getlin, **path, *get_token;
 
 	getlin = calloc(sizeof(char *), 50);
@@ -26,14 +26,13 @@ void loop(int *cnt)
 			continue;
 		ext = strncmp(prompt, "exit", 4);
 		cdf = strncmp(prompt, "cd", 2);
-		env = strncmp(prompt, "env", 3);
 		_strtok(prompt, get_token, getlin, " \t\n\r\a");
 		if (ext == 0)
 		{
 			status = getlin[1] != NULL ? atoi(getlin[1]) : 0;
 			exitfunc(get_token, getlin, path, prompt, status);
 		}
-		if (env == 0)
+		if (!strncmp(prompt, "env", 3))
 		{
 			envfunc();
 			continue;
