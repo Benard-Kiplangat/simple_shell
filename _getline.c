@@ -11,7 +11,7 @@ int _getline(char *prompt)
 {
 	size_t sz = 1024;
 	char *ptemp = calloc(sizeof(char), sz);
-	int nread = 0, rd = 0;
+	int nread = 0, n = 0, rd = 0, i;
 	/* nread: number of chars read from stdin */
 
 	prompt[0] = '\0';
@@ -19,7 +19,18 @@ int _getline(char *prompt)
 
 	do {
 		rd = read(STDIN_FILENO, ptemp, 1024);
-		strcat(prompt, ptemp);
+		for (i = 0; ptemp[i] != '\0'; i++)
+		{
+			if (ptemp[i] != ' ' && ptemp[i] != '\n')
+			{
+				n = 1;
+				break;
+			}
+		}
+		if (n == 1)
+			strcat(prompt, ptemp);
+		else
+			prompt[0] = '\0';
 		if (rd > 0)
 			nread = nread + rd;
 		if (rd > 1023)

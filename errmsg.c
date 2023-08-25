@@ -33,7 +33,7 @@ void errmsg(char **getlin, int *cnt)
 	snum[len] = ':';
 	snum[len + 1] = ' ';
 	snum[len + 2] = '\0';
-	strcat(buff, "hsh: ");
+	strcat(buff, "./hsh: ");
 	strcat(buff, snum);
 	strcat(buff, getlin[0]);
 	if (!strncmp(getlin[0], "cd", 2))
@@ -49,4 +49,5 @@ void errmsg(char **getlin, int *cnt)
 		strcat(buff, ": not found\n");
 	write(STDERR_FILENO, buff, strlen(buff));
 	free(buff);
+	exit(127);
 }

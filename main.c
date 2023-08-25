@@ -36,6 +36,7 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 			freer(getlin);
 			free(opnerr);
 			free(path);
+			return (127);
 		}
 	}
 	else
@@ -45,5 +46,5 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 		freer(getlin);
 		loop(&cnt);
 	}
-	return (cnt);
+	return (0);
 }

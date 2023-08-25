@@ -22,6 +22,8 @@ void loop(int *cnt)
 		if (term)
 			write(STDOUT_FILENO, "~$ ", 3);
 		rd += _getline(prompt); /* getting the input */
+		if (prompt[0] == '\0')
+			continue;
 		ext = strncmp(prompt, "exit", 4);
 		cdf = strncmp(prompt, "cd", 2);
 		env = strncmp(prompt, "env", 3);
