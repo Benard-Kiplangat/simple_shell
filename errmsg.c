@@ -49,5 +49,4 @@ void errmsg(char **getlin, int *cnt)
 		strcat(buff, ": not found\n");
 	write(STDERR_FILENO, buff, strlen(buff));
 	free(buff);
-	exit(127);
 }

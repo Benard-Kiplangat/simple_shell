@@ -22,7 +22,7 @@ int findexec(char **environ, char *get_token, char **path, char **getlin);
 int _strtok(char *prompt, char *token, char **getlin, char *delims);
 int _getline(char *prompt);
 void cdfunc(char **getlin, int *cnt);
-void forkfunc(char **getlin, char **environ, int *cnt);
+void forkfunc(char **getlin, char **env, int *cnt);
 void errmsg(char **getlin, int *cnt);
 int runshfile(char *filename, char **getlin, int *cnt);
 ssize_t readshfile(const char *filename, char **buf);
